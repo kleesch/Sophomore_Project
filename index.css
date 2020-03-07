@@ -1,0 +1,34 @@
+body{
+    background-color: dimgrey;
+}
+h1.title{
+    font-size: 48px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+form{
+    text-align: center;
+}
+.navigation{
+    background-color: darkgrey;
+    overflow: hidden;
+}
+.navigation a{
+    float: left;
+    color: darkblue;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+.navigation a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.navigation a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
