@@ -7,7 +7,7 @@ echo "<br>";
 echo "Hello";
 
 shell_exec('sudo chmod a+x testFile.py');
-$command = "/usr/bin/python /var/www/html/testFile.py 5";
+$command = "/usr/bin/python /var/www/html/testFile.py 1201";
 $result = shell_exec($command);
 $result_array = json_decode($result);
 
