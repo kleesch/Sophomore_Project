@@ -27,12 +27,12 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
     }
 
 }
-/*
-if($fileType != "mp3"){
+
+if($fileType != "mp3" || $fileType != "wav" || $fileType != "wv"){
     echo "Sorry, only audio files are allowed";
     echo "<br>";
     $upload_OK = 0;
-}*/
+}
 echo $target_file;
 
 echo "<br>";
