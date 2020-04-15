@@ -28,7 +28,8 @@ if(isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
 
 }
 
-if($fileType != "mp3" || $fileType != "wav" || $fileType != "wv"){
+echo $fileType;
+if($fileType != "mp3" && $fileType != "wav" && $fileType != "wv"){
     echo "Sorry, only audio files are allowed";
     echo "<br>";
     $upload_OK = 0;
@@ -49,14 +50,10 @@ else{
         
         
         if(file_exists($target_file)){
-            echo "the file exists";
-            echo "The file ". basename($fileName). " has been uploaded.";
-            echo "Executing FFMPEG for ".$fileName."<br>";
-            echo "File new name: ".$fileNewName;
+            echo "The file ". basename($fileName). " has been uploaded!";
             $cmdFFMPEG="ffmpeg -y -i /var/www/html/uploads/".$fileName."  /var/www/html/uploads/processed/".$fileNewName;
-            echo "CMD: ".$cmdFFMPEG;
-            echo "WE HAVE GOTTEN THIS FAR";
-            exec("ffmpeg -y -i /var/www/html/uploads/clip2.wav -ar 44200  /var/www/html/uploads/processed/clip2.1.wav");
+            shell_exec("echo 'sophomoreproject' | sudo -S mkdir /var/www/html/uploads/processed/".$fileNewName."_split");
+            shell_exec("echo 'sophomoreproject' | sudo -S /usr/local/bin/ffmpeg -y -i /var/www/html/uploads/".$fileName." -ar 44100 -f segment -segment_time 6 -c copy /var/www/html/uploads/processed/".$fileNewName."_split/Segment_%03d.wav 2>&1");
         }
     }
     else{
