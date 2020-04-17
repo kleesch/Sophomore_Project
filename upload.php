@@ -1,15 +1,13 @@
-
-<!DOCTYPE html> 
-<html> 
-      
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"> 
-    <title>Analyze</title> 
+    <meta charset="utf-8">
+    <title>Voice Recognition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="index.css" type="text/css" rel="stylesheet"/>
-</head> 
-<header class = "main">
-    <h1 class = "title">Voice Recognition</h1>
-    <div class = "navbar">
+    <header class = "main" id = "main">
+        <h1 class = "title" id = "title">Voice Recognition</h1>
+        <div class = "navbar">
             <ul class="navbar-nav">
                 <li class="logo">
                     <a href="#" class="nav-link">
@@ -58,27 +56,26 @@
 
             </ul>
         </div>
-</header>
-<body> 
+    </header>
 
-    
-  <div>
-    <?php
-        if(isset($_POST['scan'])) { 
-            echo "This is Button1 that is selected"; 
-            shell_exec('sudo chmod a+x testFile.py');
-            $command = "/usr/bin/python /var/www/html/testFile.py 5";
-            $result = shell_exec($command);
-            echo $result;
-            
-        } 
-    ?>
-    <form method="post"> 
-        <input type="submit" name="scan" value="Button1"/> 
-          
-    </form> 
-  </div>
-</head> 
-  
-</html> 
+</head>
 
+<body>
+<main>
+    <form action="upload-post.php" method="POST" enctype="multipart/form-data">
+        <div>
+            <label>Select audio file to upload: </label>
+            <input type="file" name="fileToUpload" id="fileToUpload"><br>
+            <label>Age</label>
+            <input type="text" name="age"><br>
+            <label>Gender</label><br>
+            <input type="radio" id="male" name="gender" value="male">
+            <label for="male">Male</label><br>
+            <input type="radio" id="female" name="gender" value="female">
+            <label for="female">Female</label><br><br>
+            <input type="submit" value="Upload" name="submit">
+        </div>
+    </form>
+</main>
+</body>
+</html>

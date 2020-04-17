@@ -1,15 +1,92 @@
+<?php
+/// directory for upload
+$target_dir = "/var/www/html/uploads/";
+$target_file = $target_dir.($_FILES["fileToUpload"]["name"]);
+$upload_OK = 1;
 
-<!DOCTYPE html> 
-<html> 
-      
+/// file stats
+$file = $_FILES['fileToUpload'];
+$fileName = $file['name'];
+$fileTmpName = $file['tmp_name'];
+$fileSize = $file['size'];
+$fileError = $file['error'];
+$fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+$fileExt = explode('.', $fileName);
+$fileActualExt = strtolower(end($fileExt));
+array_pop($fileExt);
+$fileNewName=implode('.',$fileExt).".wav";
+$displayMaxSize = ini_get('post_max_size');
+
+/// error message
+$error = "";
+
+/// user entered data
+$gender = $_POST['gender'];
+$age = $_POST['age'];
+
+/// results
+$result = "";
+
+if(isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
+    if($fileSize < 1) {
+        $error .= "Your file is too small";
+        $error .= "<br>";
+        $upload_OK = 0;
+    }
+
+}
+
+if($fileType != "mp3" && $fileType != "wav" && $filetype != "m4a"){
+    $error .= "Sorry, only audio files are allowed";
+    $error .= "<br>";
+    $upload_OK = 0;
+}
+else{
+    if(move_uploaded_file($fileTmpName, $target_file)) {
+        if(file_exists($target_file)){
+            $upload_OK = 1;
+           // $cmdFFMPEG="ffmpeg -y -i /var/www/html/uploads/".$fileName."  /var/www/html/uploads/processed/".$fileNewName;
+            shell_exec("echo 'sophomoreproject' | sudo -S mkdir /var/www/html/uploads/processed/".$fileNewName."_split");
+            shell_exec("echo 'sophomoreproject' | sudo -S /usr/local/bin/ffmpeg -y -i /var/www/html/uploads/".$fileName." -ar 44100 -f segment -segment_time 6 -c copy /var/www/html/uploads/processed/".$fileNewName."_split/Segment_%03d.wav 2>&1");
+            $response = shell_exec("python3 testFile.py 2>&1");
+            #echo substr($response,0,2);
+            switch(substr($response,0,2)) {
+                case "AB":
+                    $result="Andersen";
+                    break;
+                case "AL":
+                    $result="Andy Lu";
+                    break;
+                case "AJ":
+                    $result="Andy J";
+                    break;
+                case "PL":
+                    $result="Patrik";
+                    break;
+                case "KL":
+                    $result="Kyle";
+                    break;
+                default:
+                    $result="error";
+            }
+        }
+    }
+    else{
+        $upload_OK = 0;
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8"> 
-    <title>Analyze</title> 
+    <meta charset="utf-8">
+    <title>Voice Recognition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="index.css" type="text/css" rel="stylesheet"/>
-</head> 
-<header class = "main">
-    <h1 class = "title">Voice Recognition</h1>
-    <div class = "navbar">
+    <header class = "main" id = "main">
+        <h1 class = "title" id = "title">Voice Recognition</h1>
+        <div class = "navbar">
             <ul class="navbar-nav">
                 <li class="logo">
                     <a href="#" class="nav-link">
@@ -58,27 +135,27 @@
 
             </ul>
         </div>
-</header>
-<body> 
+    </header>
 
-    
-  <div>
-    <?php
-        if(isset($_POST['scan'])) { 
-            echo "This is Button1 that is selected"; 
-            shell_exec('sudo chmod a+x testFile.py');
-            $command = "/usr/bin/python /var/www/html/testFile.py 5";
-            $result = shell_exec($command);
-            echo $result;
-            
-        } 
-    ?>
-    <form method="post"> 
-        <input type="submit" name="scan" value="Button1"/> 
-          
-    </form> 
-  </div>
-</head> 
-  
-</html> 
+</head>
 
+<body>
+    <center>
+    <p1 class = "text" size = "3rem">
+        <br>
+        <?php
+            if($upload_OK === 0){
+                echo "ERROR: Your file was not uploaded.";
+                echo "<br>";
+                echo $error;
+            }
+            else{
+                 //echo "The file ". basename($fileName). " has been uploaded!";
+                 //echo "<br>";
+                 echo "The person speaking was ".$result;
+            }
+        ?>
+    </p1>
+    </center>
+</body>
+</html>

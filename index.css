@@ -1,10 +1,10 @@
 :root{
     font-size: 16px;
     font-family: 'sans-serif';
-    -text-primary: #b6b6b6;
-    -text-secondary: #ececec;
-    -bg-primary: #23232e;
-    -bg-secondary: #141418;
+    -text-primary: white;
+    -text-secondary: white;
+    -bg-primary: white;
+    -bg-secondary: white;
     -navbg-hover: navy;
     -navtext-hover: lightblue;
     -transition-speed: 250ms;
@@ -18,7 +18,11 @@ header {
     width: 100%;
     height: 100%;
 }
+html,body{
+    height:100%;
+    height: 200px;
 
+}
 body{
     color: #b6b6b6;
     background-color: #141418;
@@ -46,7 +50,13 @@ form{
     height: 100vh;
     position: fixed;
     background-color: #23232e;
-    transition: width 250ms ease;
+    transition: width 300ms ease;
+}
+.text{
+    font-family: cursive;
+    margin-left: 6rem;
+    color:white;
+    text-align: center;
 }
 /*
 flex container
